@@ -393,7 +393,7 @@ body::before {
         }
         
         function showHackerText() {
-            const message = "Se que no son las mejores, pero es con mucho amor, te amo demasiado amore mio❤️";
+            const message = "Se que no son las mejores,\npero es con mucho amor,\nte amo demasiado amore mio❤️";
             const auraText = document.getElementById('aura-text');
             const finalMessage = document.getElementById('final-message');
             
@@ -412,26 +412,26 @@ body::before {
             // Función para mostrar caracteres uno por uno
             function showNextCharacter() {
                 if (currentIndex < characters.length) {
-                    // Si es el primer carácter o el anterior era un espacio, crear un nuevo span
-                    if (currentIndex === 0 || characters[currentIndex-1] === ' ') {
+                    // Si es el primer carácter, el anterior era un espacio o salto de línea, crear un nuevo span
+                    if (currentIndex === 0 || characters[currentIndex-1] === ' ' || characters[currentIndex-1] === '\n') {
                         const wordSpan = document.createElement('span');
                         auraText.insertBefore(wordSpan, cursor);
                     }
-                    
                     // Agregar el carácter actual al último span
                     const lastSpan = auraText.querySelector('span:not(.cursor)');
-                    lastSpan.textContent += characters[currentIndex];
-                    
+                    if (characters[currentIndex] === '\n') {
+                        lastSpan.innerHTML += '<br>';
+                    } else {
+                        lastSpan.textContent += characters[currentIndex];
+                    }
                     // Animación de entrada
                     setTimeout(() => {
                         lastSpan.style.opacity = '1';
                         lastSpan.style.transform = 'translateY(0)';
                     }, 50);
-                    
                     currentIndex++;
-                    
                     // Mostrar siguiente carácter después de un retraso mayor (más lento)
-                    setTimeout(showNextCharacter, 150)+2000; // Más lento que antes (150ms por carácter)
+                    setTimeout(showNextCharacter, 150)+2000;
                 } else {
                     // Todos los caracteres mostrados, eliminar cursor
                     cursor.remove();
